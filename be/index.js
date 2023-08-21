@@ -1,7 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const publisRouter = require('./src/routes/publish')
-const privateRouter = require('./src/routes/private')
+const router = require('./src/routes')
 const bodyParser = require('body-parser');
 const morgan = require('morgan')
 require('dotenv').config()
@@ -19,16 +18,7 @@ app.use(morgan('combined'))
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
-app.use('/', publisRouter)
-
-app.use('/', (req, res, next) => {
-    console.log(req.query.limit)
-    if(!req.query.limit) {
-        return res.send(' hello ')
-    }
-    next()
-
-}, privateRouter)
+router(app)
 
 const PORT = process.env.PORT || 8888
 
