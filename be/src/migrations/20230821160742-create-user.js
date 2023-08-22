@@ -24,7 +24,7 @@ module.exports = {
       sdt: {
         type: Sequelize.STRING,
       },
-      adress: {
+      address: {
         type: Sequelize.STRING,
       },
       email: {

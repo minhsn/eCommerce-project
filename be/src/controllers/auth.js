@@ -17,6 +17,9 @@ class Auth {
         defaults: {
           username: username,
           password: password,
+          sdt: req.body.sdt,
+          address: req.body.address,
+          email: req.body.email
         },
       });
       if (!created) {
