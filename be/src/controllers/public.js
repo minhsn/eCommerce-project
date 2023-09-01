@@ -1,23 +1,26 @@
 const db = require('../models')
 const { QueryTypes } = require('sequelize');
+const Op = db.Sequelize.Op;
 
 class Public {
   // get product
   async getProducts(req, res) {
 
     let name = req.query.name;
-    let element = req.query.element;
 
-    console.log(name);
+    if(!name) {
+        name = ''
+    }
 
     try {
-        const products =  await db.sequelize.query(`SELECT * FROM Products where deleteFlg = 0 and name like :name`, {
-            model : db.Products,
-            mapToModel: true ,
-            replacements: { 
-                name: `%${name}%`
-        },
-            type: QueryTypes.SELECT
+        const products =  await db.Products.findAll({
+            attributes: ['id', 'name', 'price', 'description', 'averageRating', 'numberRating'],
+            where: {
+                deleteFlg: 0,
+                name: {
+                    [Op.like]: `%${name}%`
+                }
+            }
         })
         console.log(products);
         
