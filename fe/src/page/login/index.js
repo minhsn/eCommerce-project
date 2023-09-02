@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames/bind";
 import { useCookies } from 'react-cookie';
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import request from "../../utils/request";
 import styles from './Login.module.css';
 
@@ -10,7 +10,7 @@ const cx = classNames.bind(styles)
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [cookies, setCookie] = useCookies(['username']);
+  const [, setCookie] = useCookies(['username']);
 
   const usernameValidate = useRef()
   const passwordValidate = useRef()
@@ -53,9 +53,7 @@ export default function Login() {
     }
 
   } 
-  useEffect(() => {
 
-  }, [username])
 
 
 
