@@ -1,6 +1,5 @@
 body > #root > div {
   height: 100vh;
-  background: url('../public/background/bg_4.jpg') no-repeat fixed;
   background-size: cover;
 }
 

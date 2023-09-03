@@ -52,6 +52,41 @@ class Private {
           })
     }
   }
+
+  async deleteProduct(req, res) {
+    const productId = req.params.productId
+    if (productId) {
+        try {
+            const product = await db.Products.update({
+                deleteFlg: 1
+            },{
+                where: {
+                    id: productId,
+                    deleteFlg: 0
+                }
+            })
+
+            if (product[0] === 0) {
+                return res.status(404).send({
+                    message: 'productId not found'})
+            }
+
+            return res.status(200).send({
+                message: 'delete success'
+            })
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send({
+                message: 'database error'
+            })
+        }
+
+    }
+    return res.status(200).send({
+        message: 'have no productId'
+    })
+
+  }
 }
 
 module.exports = new Private

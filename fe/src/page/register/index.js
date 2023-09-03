@@ -46,7 +46,7 @@ export default function Register() {
     }
     if (!errorFlg) {
       try {
-        const res = await request.post('/api/auth/register', {
+        await request.post('/api/auth/register', {
           username: username,
           password: password,
           address: address,

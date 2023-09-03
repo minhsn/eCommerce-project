@@ -4,6 +4,7 @@ import Register from './page/register';
 import Login from './page/login';
 import Home from './page/home';
 import { DefaultLayout } from './Layout';
+import 'bootstrap/dist/css/bootstrap.css';
 
 
 function App() {

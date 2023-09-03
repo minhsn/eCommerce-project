@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     averageRating : DataTypes.DECIMAL(2, 1),
     numberRating : DataTypes.INTEGER,
-    deleteFlg : DataTypes.BOOLEAN
+    deleteFlg : DataTypes.BOOLEAN,
+    imageUrl : DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Products',
