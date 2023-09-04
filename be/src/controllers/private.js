@@ -29,16 +29,6 @@ class Private {
             model : db.Products,
             mapToModel: true ,
         })
-        if(body.elements) {
-            for (const element of Array.from(body.elements)) {
-                await db.Element.create({
-                    productId: product.id,
-                    name: element
-                }, {
-                    transaction: t
-                })
-            }
-        }
 
 
         await t.commit();

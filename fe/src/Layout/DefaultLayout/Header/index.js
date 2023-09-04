@@ -49,9 +49,7 @@ function Header() {
       <div className={cx("nav")}>
         <ul className={cx("nav-list")}>
           <li className={cx("nav-item")}>
-            <Link to="/" className={cx("navbar-brand")}>
-              <img src={"logo/logo.png"} className={cx("logo")} alt="logo" />
-            </Link>
+            <Link to="/" className={cx("logo")}></Link>
           </li>
         </ul>
 

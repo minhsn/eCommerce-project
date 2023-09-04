@@ -1,11 +1,9 @@
 const db = require('../models')
-const { QueryTypes } = require('sequelize');
 const Op = db.Sequelize.Op;
 const fs = require('fs');
-const { ifError } = require('assert');
 
 class Public {
-  // get product
+  // get products
   async getProducts(req, res) {
 
     let name = req.query.name;
@@ -37,6 +35,46 @@ class Public {
     }
   }
 
+  // get product detail
+  async getProductDetail(req, res) {
+    const productId = req.params.productId
+    console.log(productId);
+    try {
+        // get product data
+        const product = await db.Products.findOne({
+            attributes: ['id', 'name', 'price', 'description', 'averageRating', 'numberRating', 'imageUrl'],
+            where: {
+                deleteFlg: 0,
+                id: productId
+            }
+        })
+        if(!product) {
+            return res.status(404).send({
+                message: 'product not found'
+            })
+        }
+
+        // get review data
+        const review = await db.Review.findAll({
+            attributes: ['userId', 'rate', 'comment'],
+            where: {
+                productId: productId
+            }
+        })
+        return res.status(200).send({
+            product: product,
+            review: review
+        })
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "database error",
+          })
+    }
+  } 
+
+  // get image
   async getImage(req, res) {
     let imgName = 'upload/' + req.query.imgName;
     
