@@ -59,6 +59,11 @@ class Public {
             attributes: ['userId', 'rate', 'comment'],
             where: {
                 productId: productId
+            },
+            include: {
+                model: db.User,
+                as:'User',
+                attributes: ['username']
             }
         })
         return res.status(200).send({

@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { ProductContext } from "../../Layout/DefaultLayout";
+import { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./Home.module.scss";
 import {
@@ -8,7 +7,7 @@ import {
   AiFillDelete,
   AiFillEdit,
 } from "react-icons/ai";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import request from "../../utils/request";
@@ -16,10 +15,12 @@ import request from "../../utils/request";
 const cx = classNames.bind(styles);
 
 function Home() {
-  const [products] = useContext(ProductContext);
+  const [products, setProducts] = useState([]);
   const [show, setShow] = useState(false);
   const [deleteId, setDeleteId] = useState();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, ] = useSearchParams();
+  const searchWord = searchParams.get('name')
+  const navigate = useNavigate()
 
   const handleClose = () => {
     setShow(false);
@@ -28,16 +29,28 @@ function Home() {
   const handleShow = (productId) => {
     setDeleteId(productId);
     setShow(true)
+    console.log(products);
   }
   useEffect(() => {
-    useSearchParams()
-  },[searchParams])
+    const getData = async () => {
+      try {
+        const res = await request.get('/api/public/products', {params: {
+            name: searchWord
+        }})
+        setProducts(res.data)
+      } catch (error) {
+          alert('request error')
+      }
+    }
+
+    getData()
+  },[searchWord])
 
 
   const handleDelete = async () => {
     try {
         await request.delete(`/api/private/products/${deleteId}`)
-        window.location.reload(false);
+        navigate(0)
     } catch (error) {
         alert(error.response.data.message)
     }
@@ -67,26 +80,29 @@ function Home() {
         {products.map((product) => {
           return (
             <div key={product.id} className={cx("product-item")}>
-              <div
-                className={cx("product-img")}
-                style={{
-                  "backgroundImage": `url(http://localhost:18001/api/public/image?imgName=${product.imageUrl})`,
-                }}
-              ></div>
+              <Link to={`/detail/${product.id}`}>
+                <div
+                  className={cx("product-img")}
+                  style={{
+                    "backgroundImage": `url(http://localhost:18001/api/public/image?imgName=${product.imageUrl})`,
+                  }}
+                >
+                </div>
+              </Link>
               <div className={cx("product-content")}>
                 <div className={cx("admin-layout")}>
                   <h3>{product.name}</h3>
                   <div>
                     {true && (
-                      <Link to={"/edit"}>
+                      <button className={cx('admin-button')}>
                         <AiFillEdit style={{ color: "#3498db" }} />
-                      </Link>
+                      </button>
                     )}
                     <span> </span>
                     {true && (
-                      <Link onClick={() => handleShow(product.id)}>
+                      <button onClick={() => handleShow(product.id)} className={cx('admin-button')}>
                         <AiFillDelete style={{ color: "#c0392b" }} />
-                      </Link>
+                      </button>
                     )}
                   </div>
                 </div>

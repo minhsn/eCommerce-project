@@ -43,16 +43,65 @@ h1 {
         h2 {
             color: #fac564 !important;
         }
-        p, h3 {
+        p{
+            color: gray;
+            font-style: italic;
+        }
+        
+        h4 {
             color: white;
+        }
+
+        .button-buy {
+            margin-top: 20px;
+            width: 50%;
         }
 
     }
 }
 
-.wrap-review{
-    background-color: aliceblue;
+.add-comment{
+
+    width: 100%;
 }
+.wrap-review{
+    // background-color: aliceblue;
+    background-color: white;
+    margin-top: 15px;
+    padding-top: 15px;
+    button {
+        width: 100%;
+    }
+    .wrap-comment {
+        margin: 5px;
+        border-bottom: black solid 1px;
+    
+        p{
+            margin-left: 15px;
+        }
+    
+        .user-comment{
+            display: flex;
+            flex-direction: row;
+
+            .user-name{
+                color: #385898;
+            }
+    
+            p{
+                margin-left: 15px;
+                font-weight: 600;
+            }
+    
+            .star{
+                color: #fac564 ;
+                margin-top: 4px;
+                 
+            }
+        }
+    }
+}
+
 
 p{
     color: black;

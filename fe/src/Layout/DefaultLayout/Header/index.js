@@ -1,11 +1,9 @@
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Cookies } from "react-cookie";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FaSistrix } from "react-icons/fa";
-import request from "../../../utils/request";
-import { ProductContext } from '../index'
 
 const cx = classNames.bind(styles);
 
@@ -13,18 +11,7 @@ function Header() {
   const cookies = new Cookies();
   const [token] = useState(cookies.get("token"));
   const [searchWord, setSearchWord] = useState();
-  const [, setProducts] = useContext(ProductContext)
-
-  const handleSubmit = async () => {
-      try {
-        const res = await request.get('/api/public/products', {params: {
-            name: searchWord
-        }})
-        setProducts(res.data)
-    } catch (error) {
-        alert('request error')
-    }
-  }
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setSearchWord(e.target.value)
@@ -32,14 +19,7 @@ function Header() {
 
   const handleOnKeyDown = async (e) => {
       if (e.key === 'Enter') {
-        try {
-            const res = await request.get('/api/public/products', {params: {
-                name: searchWord
-            }})
-            setProducts(res.data)
-        } catch (error) {
-            alert('request error')
-        }
+        navigate(`/?name=${searchWord}`)
     }
   }
 
@@ -64,9 +44,9 @@ function Header() {
               onChange={handleChange}
               onKeyDown={handleOnKeyDown}
             />
-            <button type="submit" className={cx("searchButton")} onClick={handleSubmit}>
+            <Link to={`/?name=${searchWord}`} className={cx("searchButton")} >
               <FaSistrix/>
-            </button>
+            </Link>
           </div>
         </div>
 

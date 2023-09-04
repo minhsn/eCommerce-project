@@ -1,6 +1,6 @@
 
 h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
-    color: #fff;
+    color: #fff !important;
 }
 
 .wrap {
@@ -39,6 +39,12 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+.admin-button {
+    border: none;
+    box-shadow: none;
+    background-color: black;
+
 }
 
 p {
