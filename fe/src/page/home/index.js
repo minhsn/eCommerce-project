@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ProductContext } from "../../Layout/DefaultLayout";
 import classNames from "classnames/bind";
 import styles from "./Home.module.scss";
@@ -8,7 +8,7 @@ import {
   AiFillDelete,
   AiFillEdit,
 } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import request from "../../utils/request";
@@ -19,15 +19,20 @@ function Home() {
   const [products] = useContext(ProductContext);
   const [show, setShow] = useState(false);
   const [deleteId, setDeleteId] = useState();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClose = () => {
     setShow(false);
     setDeleteId()
-}
+  }
   const handleShow = (productId) => {
     setDeleteId(productId);
     setShow(true)
-}
+  }
+  useEffect(() => {
+    useSearchParams()
+  },[searchParams])
+
 
   const handleDelete = async () => {
     try {
