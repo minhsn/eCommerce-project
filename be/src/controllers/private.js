@@ -66,6 +66,7 @@ class Private {
     }
   }
 
+  // delete product
   async deleteProduct(req, res) {
     const productId = req.params.productId
     if (productId) {
@@ -99,6 +100,53 @@ class Private {
         message: 'have no productId'
     })
 
+  }
+
+  // add review
+  async postReview(req, res) {
+    const t = await db.sequelize.transaction();
+    const body = req.body;
+    console.log(req.body);
+
+    try {
+        if(req.body.userId && req.body.productId) {
+
+            
+        }
+        
+        await t.commit();
+        return res.status(201).send({
+            message: 'create success'
+        });
+    } catch (error) {
+        await t.rollback();
+        return res.status(500).send({
+            message: "database error",
+          })
+    }
+
+  }
+
+  async getReview(req, res) {
+    console.log(req);
+
+    try {
+        const review = await db.Review.findOne({
+            where: {
+                productId: req.query.productId,
+                userId: req.userId.data
+            }
+        })
+
+        return res.status(200).send({
+            review: review
+        })
+        
+    } catch (error) {
+        return res.status(500).send({
+            message: "database error",
+          })
+    }
   }
 }
 

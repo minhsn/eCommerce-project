@@ -15,4 +15,14 @@ router.delete('/products/:productId',
     authController.checkLogin, 
     privateController.deleteProduct)
 
+router.post('/comment', 
+    // authController.checkLoginNormal,
+    privateController.postReview
+)
+
+router.get('/comment', 
+    authController.checkLoginNormal,
+    privateController.getReview
+)
+
 module.exports = router

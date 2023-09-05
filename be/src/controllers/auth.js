@@ -75,7 +75,7 @@ class Auth {
     }
   }
 
-  // check login
+  // check login admin
   async checkLogin(req, res, next) {
     try {
       let token = req.cookies?.token
@@ -102,6 +102,35 @@ class Auth {
     }
 
   }
+
+    // check login normal
+    async checkLoginNormal(req, res, next) {
+      try {
+        let token = req.cookies?.token
+        if(!token){
+          return res.status(403).json({
+            message: 'please login'
+          })
+        }
+  
+        console.log(token);
+        const userId = jwt.decode(token, process.env.secret)
+        const user = await db.User.findOne({
+          where: {
+            id: userId.data,
+            }
+          })
+        if(!user) throw Error
+        req.userId = userId
+        next()
+      } catch (error) {
+        return res.status(500).json({
+          message: 'please login'
+        })
+      }
+  
+    }
+
 }
 
 module.exports = new Auth

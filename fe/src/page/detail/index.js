@@ -16,11 +16,54 @@ function Detail() {
     const [review, setReview] = useState([])
     const [show, setShow] = useState(false);
     const [comment, setComment] = useState('')
+    const [rate, setRate] = useState()
+    const [cssStar, setCssStar] = useState(['black','black','black','black','black'])
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        setShow(true)
+        const getData = async () => {
+            try {
+                const res = await request.get(`/api/private/comment?productId=${productId}`, {
+                    withCredentials: true
+                })
+                const review = res.data.review
+                if(review) {
+                    setComment(review.comment)
+                    setRate(review.rate)
+                    const newCss = cssStar.map( (e, i) => {
+                        if (i < rate) {
+                            return '#fac564'
+                        } else {
+                            return 'black'
+                        }
+                    } )
+                    setCssStar(newCss)
+                }
+            } catch (error) {
+              alert('get comment error')
+            } 
+        }
+        getData()
+    };
     const handleOnChangeComment = (e) => {
         setComment(e.target.value)
+    }
+
+    const handleRating = (rate) => {
+        setRate(rate)
+        const newCss = cssStar.map( (e, i) => {
+            if (i < rate) {
+                return '#fac564'
+            } else {
+                return 'black'
+            }
+        } )
+        setCssStar(newCss)
+    }
+
+    const handleComment = () => {
+        alert(1)
     }
 
     useEffect(() => {
@@ -91,7 +134,9 @@ function Detail() {
               controlId="exampleForm.ControlTextarea1"
             >
               <Form.Label>Rating</Form.Label>
-              <p>hii</p>
+              {cssStar.map((e, i) => {
+                return <AiFillStar key={i} className={cx('star-rating')} onClick={() => handleRating(i + 1)} style={{color: e}}/>
+              })}
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -99,7 +144,7 @@ function Detail() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleComment}>
             Save Changes
           </Button>
         </Modal.Footer>
