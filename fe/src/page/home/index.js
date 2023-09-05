@@ -67,6 +67,10 @@ function Home() {
     navigate('/product/create')
   }
 
+  const handleEdit = (id) => {
+    navigate(`/product/edit/${id}`)
+  }
+
   return (
     <div className={cx("wrap")}>
         {/* modal delete */}
@@ -106,7 +110,7 @@ function Home() {
                   <div>
                     {role && (
                       <button className={cx('admin-button')}>
-                        <AiFillEdit style={{ color: "#3498db" }} />
+                        <AiFillEdit style={{ color: "#3498db" }} onClick={() => handleEdit(product.id)} />
                       </button>
                     )}
                     <span> </span>
