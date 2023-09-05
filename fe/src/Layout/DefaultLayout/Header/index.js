@@ -26,6 +26,7 @@ function Header() {
 
   const handleLogout = () => {
     cookies.remove("token")
+    cookies.remove("role")
     navigate(`/login`)
   }
 

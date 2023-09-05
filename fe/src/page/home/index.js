@@ -6,6 +6,7 @@ import {
   AiOutlineUser,
   AiFillDelete,
   AiFillEdit,
+  AiOutlinePlus
 } from "react-icons/ai";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
@@ -60,6 +61,10 @@ function Home() {
         alert(error.response.data.message)
         navigate('/login')
     }
+  }
+
+  const handleAdd = async () => {
+    navigate('/product/create')
   }
 
   return (
@@ -134,6 +139,10 @@ function Home() {
             </div>
           );
         })}
+        {/* button add */}
+        {role && <Button variant="outline-secondary" className={cx("product-item")} onClick={handleAdd}>
+          <AiOutlinePlus className={cx('add-logo')}/>
+        </Button>}
       </div>
     </div>
   );
