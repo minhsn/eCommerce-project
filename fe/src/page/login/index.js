@@ -36,6 +36,7 @@ export default function Login() {
           password: password
         })
         setCookie('token', res.data.token, { path: '/' })
+        setCookie('role', res.data.role, { path: '/' })
         window.location.replace('/')
   
       } catch (error) {

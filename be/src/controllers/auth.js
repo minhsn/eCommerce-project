@@ -56,10 +56,11 @@ class Auth {
             }
         })
         if (user) {
-            const token = jwt.sign({_id: user._id}, process.env.secret)
-            return res.send({
+            const token = jwt.sign({data: `${user.id}`}, process.env.secret)
+            return res.json({
                 message: 'login success',
-                token: token
+                token: token,
+                role: user.role
             })
         } else {
             return res.status(400).send({
@@ -72,6 +73,34 @@ class Auth {
             message: "database error",
           });
     }
+  }
+
+  // check login
+  async checkLogin(req, res, next) {
+    try {
+      let token = req.cookies?.token
+      if(!token){
+        return res.status(403).json({
+          message: 'please login'
+        })
+      }
+
+      console.log(token);
+      const userId = jwt.decode(token, process.env.secret)
+      const user = await db.User.findOne({
+        where: {
+          id: userId.data,
+          role: '01'
+          }
+        })
+      if(!user) throw Error
+      next()
+    } catch (error) {
+      return res.status(500).json({
+        message: 'please login'
+      })
+    }
+
   }
 }
 

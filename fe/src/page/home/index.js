@@ -11,6 +11,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import request from "../../utils/request";
+import { Cookies } from "react-cookie";
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,8 @@ function Home() {
   const [deleteId, setDeleteId] = useState();
   const [searchParams, ] = useSearchParams();
   const searchWord = searchParams.get('name')
+  const cookies = new Cookies();
+  const [role] = useState(cookies.get("role"));
   const navigate = useNavigate()
 
   const handleClose = () => {
@@ -49,10 +52,13 @@ function Home() {
 
   const handleDelete = async () => {
     try {
-        await request.delete(`/api/private/products/${deleteId}`)
+        await request.delete(`/api/private/products/${deleteId}`, {
+          withCredentials: true
+        })
         navigate(0)
     } catch (error) {
         alert(error.response.data.message)
+        navigate('/login')
     }
   }
 
@@ -93,13 +99,13 @@ function Home() {
                 <div className={cx("admin-layout")}>
                   <h3>{product.name}</h3>
                   <div>
-                    {true && (
+                    {role && (
                       <button className={cx('admin-button')}>
                         <AiFillEdit style={{ color: "#3498db" }} />
                       </button>
                     )}
                     <span> </span>
-                    {true && (
+                    {role && (
                       <button onClick={() => handleShow(product.id)} className={cx('admin-button')}>
                         <AiFillDelete style={{ color: "#c0392b" }} />
                       </button>

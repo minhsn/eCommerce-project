@@ -8,8 +8,6 @@ class Private {
 
     let body = req.body;
 
-    console.log(body);
-
     try {
         // const element =  await db.Element.findAll({
         //     include: {
@@ -36,7 +34,6 @@ class Private {
 
     } catch (error) {
         await t.rollback();
-        console.log(error);
         return res.status(500).send({
             message: "database error",
           })
