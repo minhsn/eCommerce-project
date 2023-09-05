@@ -35,7 +35,6 @@ class Private {
                 model : db.Products,
                 mapToModel: true ,
             })
-
             await t.commit();
             return res.status(200).send({
                 message: ''
@@ -46,7 +45,7 @@ class Private {
                 name: body.name,
                 price: body.price,
                 description: body.description,
-                imageUrl: req.file.filename
+                imageUrl: req.file?.filename
             }, { 
                 transaction: t,
                 model : db.Products,
