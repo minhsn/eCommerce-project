@@ -3,6 +3,7 @@ import styles from "./CreatePage.module.scss";
 import Button from "react-bootstrap/esm/Button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import request from "../../utils/request";
 
 const cx = classNames.bind(styles)
 
@@ -17,8 +18,24 @@ function CreatePage() {
         navigate('/')
     }
 
-    const handleSave = () => {
-
+    const handleSave = async () => {
+        try {
+            await request.post('/api/private/products', {
+                name: name,
+                price: price,
+                description: description,
+                image: img
+            }, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            })
+            alert('create success')
+            navigate('/')
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
 
 
