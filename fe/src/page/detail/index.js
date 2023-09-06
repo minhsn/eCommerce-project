@@ -14,7 +14,7 @@ function Detail() {
     const {productId} = useParams();
     const [product, setProduct] = useState()
     const [review, setReview] = useState([])
-    const [number, setNumber] = useState(0)
+    const [number, setNumber] = useState(1)
     const [show, setShow] = useState(false);
     const [comment, setComment] = useState('')
     const [rate, setRate] = useState()
@@ -123,7 +123,7 @@ function Detail() {
                     <h2>{product && product.name}</h2>
                     <p>{product && product.description}</p>
                     <h4>{product && product.price} VND</h4>
-                    <span>amount</span> <input type="number" className={cx('number-input')} min={0} value={number} onChange={handleNumber}></input>
+                    <span>amount</span> <input type="number" className={cx('number-input')} min={1} value={number} onChange={handleNumber}></input>
                     <Button variant="outline-warning" className={cx('button-buy')} onClick={handleAddCart}>Add to bag</Button>
                 </div>
             </div>

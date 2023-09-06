@@ -25,4 +25,9 @@ router.get('/comment',
     privateController.getReview
 )
 
+router.post('/invoice',
+    authController.checkLoginNormal,
+    privateController.postInvoice
+)
+
 module.exports = router

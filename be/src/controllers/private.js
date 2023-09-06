@@ -233,6 +233,62 @@ class Private {
           })
     }
   }
+
+  async postInvoice(req, res) {
+    const t = await db.sequelize.transaction();
+
+    const userId = req.userId.data
+    const sdt = req.body.phone
+    const address = req.body.address
+    const total = req.body.total
+    const products = req.body.products
+
+    if(!address || !sdt) {
+        return res.status(500).send({
+            message: "adress and phone number is require",
+          })
+    }
+    try {
+        const invoce = await db.Invoices.create({
+            userId: userId,
+            sdt: sdt,
+            address: address,
+            total: total
+        }, {
+            transaction: t
+        })
+
+        console.log(products);
+    
+            
+        for (const product of products) {
+            await db.IvoPro.create({
+                productId: product.id,
+                invoiceId: invoce.id,
+                number: product.number
+            },{
+                transaction: t
+            })
+        }
+        
+        t.commit()
+
+        return res.status(200).send({
+            message: 'payment success'
+        })
+        
+        // await db.IvoPro.create({
+        //     productId: productId,
+
+        // })
+    } catch (error) {
+        t.rollback()
+        console.log(error);
+        return res.status(500).send({
+            message: "database error",
+          })
+    }
+  }
 }
 
 module.exports = new Private

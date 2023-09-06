@@ -3,6 +3,7 @@ import styles from "./Invoice.module.scss";
 import classNames from "classnames/bind";
 import Button from "react-bootstrap/esm/Button";
 import { useNavigate } from "react-router-dom";
+import request from "../../utils/request";
 
 const cx = classNames.bind(styles)
 
@@ -10,14 +11,43 @@ function Invoice() {
     const [products, setProducts] = useState({})
     const [key, setKey] = useState([])
     const [total, setTotal] = useState()
+    const [phone, setPhone] = useState('')
+    const [adress, setAddress] = useState('')
     const navigate = useNavigate()
 
     const handleBack = () => {
         navigate('/')
     }
 
+    const handleChange = (e) => {
+        if(e.target.name === 'adress') {
+            setAddress(e.target.value)
+          } else if (e.target.name === 'phone') {
+            setPhone(e.target.value)
+          }
+    }
+
     const handleSave = async () => {
-        alert(1)
+        try {
+            const pro = key.map(k => {
+                return {
+                    id: k,
+                    number: products[`${k}`].number
+                }
+            })
+            await request.post('/api/private/invoice', {
+                products: pro,
+                address: adress,
+                phone: phone,
+                total:total
+            }, {
+                withCredentials: true,
+            })
+            localStorage.removeItem('product')
+            alert('update success')
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
 
     const handleDelete = (i) => {
@@ -56,19 +86,19 @@ function Invoice() {
                 )
             })}
         </div>
-        <div>
-            <p>Total</p>
-            <p>{total}</p>
+        <div className={cx('wrap-total')}>
+            <h1>Total</h1>
+            <h1>{total}</h1>
         </div>
-        <div>
-            <span>Address</span> <input type="text"></input>
+        <div className={cx("wrap-address")}>
+            <p>Address</p> <input type="text" onChange={handleChange} name="adress" value={adress}></input>
         </div>
-        <div>
-            <span>Phone</span> <input type="text"></input>
+        <div className={cx("wrap-phone")}>
+            <p>Phone</p> <input type="text" onChange={handleChange} name="phone" value={phone}></input>
         </div>
-        <div>
-        <Button variant="outline-secondary" onClick={handleBack}>Back menu</Button>{' '}
-                <Button variant="outline-success" onClick={handleSave}>Payment</Button>{' '}
+        <div className={cx("wrap-button")}>
+            <Button variant="outline-secondary" onClick={handleBack}>Back menu</Button>{' '}
+            <Button variant="outline-success" onClick={handleSave}>Payment</Button>{' '}
         </div>
 
     </div> );
