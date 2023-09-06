@@ -21,9 +21,9 @@ function Detail() {
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
-        setShow(true)
         const getData = async () => {
             try {
+                setShow(true)
                 const res = await request.get(`/api/private/comment?productId=${productId}`, {
                     withCredentials: true
                 })
@@ -40,8 +40,9 @@ function Detail() {
                     } )
                     setCssStar(newCss)
                 }
+                
             } catch (error) {
-              alert('get comment error')
+                alert(error.response.data.message)
             } 
         }
         getData()
@@ -62,8 +63,22 @@ function Detail() {
         setCssStar(newCss)
     }
 
-    const handleComment = () => {
-        alert(1)
+    const handleComment = async () => {
+        try {
+            await request.post(`/api/private/comment`,{
+                comment: comment,
+                rate: rate,
+                productId: productId
+            }, {
+                withCredentials: true
+            })
+
+            setShow(false)
+            
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+
     }
 
     useEffect(() => {
@@ -78,7 +93,7 @@ function Detail() {
             } 
         }
         getData()
-    },[productId])
+    },[productId, show])
 
     return ( 
     <div className={cx('wrap')}>
@@ -135,7 +150,7 @@ function Detail() {
             >
               <Form.Label>Rating</Form.Label>
               {cssStar.map((e, i) => {
-                return <AiFillStar key={i} className={cx('star-rating')} onClick={() => handleRating(i + 1)} style={{color: e}}/>
+                return <AiFillStar key={i} className={cx('star-rating')} onClick={() => handleRating(i + 1)} style={{color: i<rate? '#fac564': "black"}}/>
               })}
             </Form.Group>
           </Form>

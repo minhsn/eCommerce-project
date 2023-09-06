@@ -16,7 +16,7 @@ router.delete('/products/:productId',
     privateController.deleteProduct)
 
 router.post('/comment', 
-    // authController.checkLoginNormal,
+    authController.checkLoginNormal,
     privateController.postReview
 )
 

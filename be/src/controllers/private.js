@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const db = require('../models')
 
 class Private {
@@ -106,19 +107,96 @@ class Private {
   async postReview(req, res) {
     const t = await db.sequelize.transaction();
     const body = req.body;
-    console.log(req.body);
+    const userId = req.userId.data
+
+    console.log(body.productId);
 
     try {
-        if(req.body.userId && req.body.productId) {
+        const review = await db.Review.findOne({
+            where: {
+                productId: body.productId,
+                userId: userId
+            }
+        })
 
-            
+
+        if (review) {
+            await db.Review.update({
+                comment: body.comment,
+                rate: body.rate
+            },{
+                where: {
+                    productId: body.productId,
+                    userId: userId,
+                }
+            }, {
+                transaction: t
+            })
+
+            const avgStar = await db.Review.findOne({
+                attributes: [
+                    [db.Sequelize.fn('AVG', db.Sequelize.col('rate')), 'avgRating'],
+                    [db.Sequelize.fn('COUNT', db.Sequelize.col('rate')), 'sumRating']
+                ],
+                group: 'productId',
+                where: {
+                    productId: body.productId,
+                },
+            })
+            await db.Products.update({
+                averageRating: avgStar.dataValues.avgRating,
+                numberRating: avgStar.dataValues.sumRating,
+            },{
+                where: {
+                    id: body.productId,
+                }
+            }, {
+                transaction: t
+            })
+
+            await t.commit();
+            return res.status(200).send({
+                message: 'update success'
+            });
+        } else {
+            const a = await db.Review.create({
+                productId: body.productId,
+                userId: userId,
+                comment: body.comment,
+                rate: body.rate
+            })
+
+            console.log(a);
+
+            const avgStar = await db.Review.findOne({
+                attributes: [
+                    [db.Sequelize.fn('AVG', db.Sequelize.col('rate')), 'avgRating'],
+                    [db.Sequelize.fn('COUNT', db.Sequelize.col('rate')), 'sumRating']
+                ],
+                group: 'productId',
+                where: {
+                    productId: body.productId,
+                },
+            })
+
+            await db.Products.update({
+                averageRating: avgStar.dataValues.avgRating,
+                numberRating: avgStar.dataValues.sumRating,
+            },{
+                where: {
+                    id: body.productId,
+                }
+            })
+
+            await t.commit();
+            console.log('return');
+            return res.status(201).send({
+                message: 'create success'
+            });
         }
         
-        await t.commit();
-        return res.status(201).send({
-            message: 'create success'
-        });
     } catch (error) {
+        console.log(error);
         await t.rollback();
         return res.status(500).send({
             message: "database error",
