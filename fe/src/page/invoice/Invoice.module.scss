@@ -1,0 +1,30 @@
+.wrap-content{
+
+    min-height: 500px;
+    width: 100%;
+    background-color: rgb(210, 51, 165);
+
+    .wrap-item{
+        min-height: 50%;
+
+        .item{
+            display: flex;
+            margin-left: 40%;
+
+            img{
+                height: 30px;
+                width: 30px;
+            }
+
+            p{
+                margin: 5px;
+            }
+
+            button {
+                margin-bottom: 15px;
+                height: 40px;
+                width: 70px;
+            }
+        }
+    }
+}

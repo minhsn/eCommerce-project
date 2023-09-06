@@ -9,6 +9,7 @@ class Private {
 
     let body = req.body;
 
+
     try {
         if(!body.price && !body.name) {
             return res.status(400).send({
@@ -20,13 +21,23 @@ class Private {
                 message: 'price must be int'
             });
         }
-        if(body.id) {
-            await db.Products.update({
+        let data
+        if(req.file) {
+            data = {
                 name: body.name,
                 price: body.price,
                 description: body.description,
                 imageUrl: req.file.filename
-            },{
+            }
+        } else {
+            data = {
+                name: body.name,
+                price: body.price,
+                description: body.description
+            }
+        }
+        if(body.id) {
+            await db.Products.update(data,{
                 where: {
                     id: body.id
                 }
@@ -42,12 +53,7 @@ class Private {
             });
         } else {
 
-            const product = await db.Products.create({
-                name: body.name,
-                price: body.price,
-                description: body.description,
-                imageUrl: req.file?.filename
-            }, { 
+            const product = await db.Products.create(data, { 
                 transaction: t,
                 model : db.Products,
                 mapToModel: true ,
@@ -60,6 +66,7 @@ class Private {
 
 
     } catch (error) {
+        console.log(error);
         await t.rollback();
         return res.status(500).send({
             message: "database error",

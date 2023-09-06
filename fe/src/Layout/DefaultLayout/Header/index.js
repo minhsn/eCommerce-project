@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Cookies } from "react-cookie";
 import { useState } from "react";
 import { FaSistrix } from "react-icons/fa";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import Button from "react-bootstrap/esm/Button";
 
 const cx = classNames.bind(styles);
@@ -22,6 +23,10 @@ function Header() {
       if (e.key === 'Enter') {
         navigate(`/?name=${searchWord}`)
     }
+  }
+
+  const handleCart = () => {
+    navigate('/invoice')
   }
 
   const handleLogout = () => {
@@ -78,6 +83,7 @@ function Header() {
           style={{ display: !token ? "none" : "block" }}
         >
           <li className={cx("nav-item")}>
+            <AiOutlineShoppingCart className={cx('cart')} onClick={handleCart}></AiOutlineShoppingCart>
             <Button variant="outline-secondary" onClick={handleLogout}>logout</Button>
           </li>
         </ul>

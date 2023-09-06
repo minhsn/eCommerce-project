@@ -14,6 +14,7 @@ function Detail() {
     const {productId} = useParams();
     const [product, setProduct] = useState()
     const [review, setReview] = useState([])
+    const [number, setNumber] = useState(0)
     const [show, setShow] = useState(false);
     const [comment, setComment] = useState('')
     const [rate, setRate] = useState()
@@ -49,6 +50,21 @@ function Detail() {
     };
     const handleOnChangeComment = (e) => {
         setComment(e.target.value)
+    }
+
+    const handleNumber = (e) => {
+        setNumber(e.target.value)
+    }
+
+    const handleAddCart = () => {
+        const localProduct = JSON.parse(localStorage.getItem('product')) || {}
+        console.log(localProduct);
+        localProduct[`${product.id}`] = {
+            ...product,
+            number: number,
+        }
+        localStorage.setItem('product', JSON.stringify(localProduct))
+        alert('add to cart success')
     }
 
     const handleRating = (rate) => {
@@ -107,7 +123,8 @@ function Detail() {
                     <h2>{product && product.name}</h2>
                     <p>{product && product.description}</p>
                     <h4>{product && product.price} VND</h4>
-                    <Button variant="outline-warning" className={cx('button-buy')}>Add to bag</Button>
+                    <span>amount</span> <input type="number" className={cx('number-input')} min={0} value={number} onChange={handleNumber}></input>
+                    <Button variant="outline-warning" className={cx('button-buy')} onClick={handleAddCart}>Add to bag</Button>
                 </div>
             </div>
         </div>
