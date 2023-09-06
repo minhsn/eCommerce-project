@@ -24,7 +24,6 @@ function Detail() {
     const handleShow = () => {
         const getData = async () => {
             try {
-                setShow(true)
                 const res = await request.get(`/api/private/comment?productId=${productId}`, {
                     withCredentials: true
                 })
@@ -41,8 +40,10 @@ function Detail() {
                     } )
                     setCssStar(newCss)
                 }
+                setShow(true)
                 
             } catch (error) {
+                setShow(false)
                 alert(error.response.data.message)
             } 
         }
